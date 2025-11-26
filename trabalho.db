@@ -1,0 +1,74 @@
+--
+-- File generated with SQLiteStudio v3.4.17 on qua nov 26 13:50:02 2025
+--
+-- Text encoding used: System
+--
+PRAGMA foreign_keys = off;
+BEGIN TRANSACTION;
+
+-- Table: categoria
+CREATE TABLE IF NOT EXISTS categoria (
+    id_categoria INT NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL
+);
+INSERT INTO categoria (id_categoria, nome) VALUES (1, 'Ficção');
+INSERT INTO categoria (id_categoria, nome) VALUES (2, 'Não-ficção');
+INSERT INTO categoria (id_categoria, nome) VALUES (3, 'Fantasia');
+
+-- Table: devolucao
+CREATE TABLE IF NOT EXISTS devolucao(
+    id_devolucao INT NOT NULL PRIMARY KEY,
+    data_devolucao DATE,
+    id_emprestimo INT,
+    FOREIGN KEY (id_emprestimo) REFERENCES emprestimo(id_emprestimo)
+);
+INSERT INTO devolucao (id_devolucao, data_devolucao, id_emprestimo) VALUES (1, '2025-11-24', 1);
+
+-- Table: emprestimo
+CREATE TABLE IF NOT EXISTS emprestimo(
+    id_emprestimo INT NOT NULL PRIMARY KEY,
+    data_emprestimo DATE,
+    data_prevista DATE,
+    id_livro INT,
+    id_leitor INT,
+    id_funcionario INT,
+    FOREIGN KEY (id_livro) REFERENCES livro(id_livro),
+    FOREIGN KEY (id_leitor) REFERENCES leitor(id_leitor),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
+);
+INSERT INTO emprestimo (id_emprestimo, data_emprestimo, data_prevista, id_livro, id_leitor, id_funcionario) VALUES (1, '2025-11-24', '2025-12-01', 1, 1, 1);
+INSERT INTO emprestimo (id_emprestimo, data_emprestimo, data_prevista, id_livro, id_leitor, id_funcionario) VALUES (2, '2025-11-23', '2025-11-30', 2, 2, 2);
+
+-- Table: funcionario
+CREATE TABLE IF NOT EXISTS funcionario(
+    id_funcionario INT NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    cargo TEXT
+);
+INSERT INTO funcionario (id_funcionario, nome, cargo) VALUES (1, 'Carlos', 'Bibliotecário');
+INSERT INTO funcionario (id_funcionario, nome, cargo) VALUES (2, 'Diana', 'Auxiliar');
+
+-- Table: leitor
+CREATE TABLE IF NOT EXISTS leitor(
+    id_leitor INT NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+INSERT INTO leitor (id_leitor, nome, email) VALUES (1, 'Alice', 'alice@email.com');
+INSERT INTO leitor (id_leitor, nome, email) VALUES (2, 'Bruno', 'bruno@email.com');
+
+-- Table: livro
+CREATE TABLE IF NOT EXISTS livro(
+    id_livro INT NOT NULL PRIMARY KEY,
+    titulo TEXT NOT NULL,
+    autor TEXT, 
+    quantidade INT,
+    id_categoria INT,
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+INSERT INTO livro (id_livro, titulo, autor, quantidade, id_categoria) VALUES (1, 'O Senhor dos Anéis', 'J.R.R. Tolkien', 5, 3);
+INSERT INTO livro (id_livro, titulo, autor, quantidade, id_categoria) VALUES (2, '1984', 'George Orwell', 10, 1);
+INSERT INTO livro (id_livro, titulo, autor, quantidade, id_categoria) VALUES (3, 'Sapiens', 'Yuval Noah Harari', 7, 2);
+
+COMMIT TRANSACTION;
+PRAGMA foreign_keys = on;
